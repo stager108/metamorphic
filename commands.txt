@@ -1,0 +1,2 @@
+docker build -t bd .
+docker run -it -v "/dir1:/dir2:" bd /bin/bash

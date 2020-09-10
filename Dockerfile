@@ -65,12 +65,9 @@ RUN mkdir build && cd build &&  ../strelka-2.9.10.release_src/configure --jobs=4
 RUN pip install biopython==1.77
 
 RUN mkdir carsonella
+RUN mkdir scripts
 COPY  carsonella_rudii carsonella
+COPY scripts scripts
 
-RUN iss generate --genomes carsonella/genome.fa --model miseq --output carsonella/reads -n 1k
-
-RUN  bwa index carsonella/genome.fa &&\
-     bwa mem carsonella/genome.fa carsonella/reads_R1.fastq carsonella/reads_R2.fastq > carsonella/aln.sam
-RUN ls carsonella
-
-CMD []
+RUN apt-get update
+RUN apt-get install nano
