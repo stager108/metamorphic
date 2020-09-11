@@ -8,4 +8,4 @@ bwa index /~/carsonella/genome.fa &&\
      bwa mem /~/carsonella/genome.fa /~/carsonella/reads_R1.fastq /~/carsonella/reads_R2.fastq > /~/carsonella/aln.sam
 
 # bamSurgeon
-/~/bamsurgeon/test/test_indel.sh
+/~/scripts/test_indel.sh /~/picard/build/libs/picard.jar

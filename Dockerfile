@@ -62,12 +62,17 @@ RUN wget https://github.com/Illumina/strelka/releases/download/v2.9.10/strelka-2
 RUN tar -xjf strelka-2.9.10.release_src.tar.bz2
 RUN mkdir build && cd build &&  ../strelka-2.9.10.release_src/configure --jobs=4 --prefix=/strelka && make -j4 install
 
+
+RUN git clone https://github.com/broadinstitute/picard.git && cd picard/ &&  ./gradlew shadowJar
+
 RUN pip install biopython==1.77
 
 RUN mkdir carsonella
 RUN mkdir scripts
-COPY  carsonella_rudii carsonella
+COPY carsonella_rudii carsonella
 COPY scripts scripts
 
 RUN apt-get update
 RUN apt-get install nano
+RUN apt-get install mlocate
+RUN updatedb
