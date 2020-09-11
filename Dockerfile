@@ -12,7 +12,7 @@ RUN pip3 install InSilicoSeq
 
 ENV PATH=$PATH:$HOME/bin
 
-WORKDIR ~/
+WORKDIR /root
 
 #install the bareminimum and remove the cache
 RUN apt-get update && apt-get install -y --no-install-recommends \
