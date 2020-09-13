@@ -38,7 +38,7 @@ python2 /manta/bin/configManta.py \
 --referenceFasta ./carsonella/genome.fa \
 --runDir ./carsonella/manta
 
-python2 ./carsonella/runWorkflow.py
+python2 ./carsonella/manta/runWorkflow.py
 
 python2 /strelka/bin/configureStrelkaSomaticWorkflow.py \
 --normalBam ./carsonella/aln.bam  \
