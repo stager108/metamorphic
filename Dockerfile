@@ -67,12 +67,12 @@ RUN git clone https://github.com/broadinstitute/picard.git && cd picard/ &&  ./g
 
 RUN pip install biopython==1.77
 
-RUN mkdir carsonella
-RUN mkdir scripts
-COPY carsonella_rudii carsonella
-COPY scripts scripts
-
 RUN apt-get update
 RUN apt-get install nano
 RUN apt-get install mlocate
 RUN updatedb
+
+RUN mkdir carsonella
+RUN mkdir scripts
+COPY carsonella_rudii carsonella
+COPY scripts scripts
