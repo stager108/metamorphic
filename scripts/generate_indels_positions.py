@@ -21,9 +21,9 @@ def write_to_file(file, text, mode='w'):
 
     
 if __name__ == "__main__":
-    ans = generate_varfile_insert('Chromosome', 3, 'AAAAAAAAAAAAAAAAAAA', 1000, 'INS')
+    ans = generate_varfile_insert('Chromosome', 3, 'AAAAAAAAAAAAAAAAAAA', 100000, 'INS')
     write_to_file('./carsonella/test_indel.txt', ans, 'w')
-    ans = generate_varfile_insert('Chromosome', 3, 'GCTTTTTTTTTTTT', 1000, 'INS')
+    ans = generate_varfile_insert('Chromosome', 3, 'GCTTTTTTTTTTTT', 100000, 'INS')
     write_to_file('./carsonella/test_indel.txt', ans, 'a') 
 
 
