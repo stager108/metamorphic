@@ -2,7 +2,7 @@
 import os
 import random
 
-def generate_varfile_insert(chrom_num, insert_num, indel, file_length, vaf='0.99'):
+def generate_varfile_insert(chrom_num, insert_num, indel, file_length, m_type, vaf='0.99'):
     chrom_num = str(chrom_num)
     ans = ''
     for i in range(insert_num):
@@ -11,16 +11,19 @@ def generate_varfile_insert(chrom_num, insert_num, indel, file_length, vaf='0.99
                         str(position),
                         str(position + 1),
                         str(vaf),
+                        m_type,
                         indel + '\n'])
     return ans
 
 def write_to_file(file, text, mode='w'):
     with open(file, mode) as f:
         f.write(text)
-      
+
     
 if __name__ == "__main__":
-    ans = generate_varfile_insert(1, 3, 'AAA', 1000)
-    write_to_file('./carsonella/test_indel.txt', ans, 'a')
-    ans = generate_varfile_insert(1, 3, 'BBB', 1000)
+    ans = generate_varfile_insert('Chromosome', 3, 'AAAAAAAAAAAAAAAAAAA', 1000, 'INS')
+    write_to_file('./carsonella/test_indel.txt', ans, 'w')
+    ans = generate_varfile_insert('Chromosome', 3, 'GCTTTTTTTTTTTT', 1000, 'INS')
     write_to_file('./carsonella/test_indel.txt', ans, 'a') 
+
+

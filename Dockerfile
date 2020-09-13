@@ -55,15 +55,20 @@ RUN pip install cython && pip install pysam
 RUN git clone https://github.com/adamewing/bamsurgeon.git
 RUN export PATH=$PATH:$HOME/bin && cd bamsurgeon && python3 setup.py install
 
-RUN mkdir strelka
+RUN mkdir build
 RUN apt-get update -qq
 RUN apt-get install -qq bzip2 gcc g++ make python zlib1g-dev
 RUN wget https://github.com/Illumina/strelka/releases/download/v2.9.10/strelka-2.9.10.release_src.tar.bz2
 RUN tar -xjf strelka-2.9.10.release_src.tar.bz2
-RUN mkdir build && cd build &&  ../strelka-2.9.10.release_src/configure --jobs=4 --prefix=/strelka && make -j4 install
+RUN cd build &&  ../strelka-2.9.10.release_src/configure --jobs=4 --prefix=/strelka && make -j4 install
 
 
 RUN git clone https://github.com/broadinstitute/picard.git && cd picard/ &&  ./gradlew shadowJar
+
+RUN wget https://github.com/Illumina/manta/releases/download/v1.6.0/manta-1.6.0.release_src.tar.bz2
+RUN tar -xjf manta-1.6.0.release_src.tar.bz2 
+RUN mkdir manta && cd manta &&  ../manta-1.6.0.release_src/configure --jobs=4 --prefix=/manta &&\
+make -j4 install
 
 RUN pip install biopython==1.77
 
@@ -76,3 +81,5 @@ RUN mkdir carsonella
 RUN mkdir scripts
 COPY carsonella_rudii carsonella
 COPY scripts scripts
+
+RUN rm *.tar.bz2 *.tgz
