@@ -77,9 +77,10 @@ RUN apt-get install nano
 RUN apt-get install mlocate
 RUN updatedb
 
+RUN rm *.tar.bz2 *.tgz
+
 RUN mkdir carsonella
 RUN mkdir scripts
 COPY carsonella_rudii carsonella
 COPY scripts scripts
 
-RUN rm *.tar.bz2 *.tgz
