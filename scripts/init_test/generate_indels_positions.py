@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 import os
 import random
@@ -25,5 +26,3 @@ if __name__ == "__main__":
     write_to_file('./carsonella/test_indel.txt', ans, 'w')
     ans = generate_varfile_insert('Chromosome', 3, 'GCTTTTTTTTTTTT', 100000, 'INS')
     write_to_file('./carsonella/test_indel.txt', ans, 'a') 
-
-

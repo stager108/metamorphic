@@ -75,7 +75,7 @@ def generate_deletions(path, file_name, configuration, mode='w'):
 
 
 def generate_test_independent_1():
-    path = './carsonella'
+    path = './results'
     file_pref_1 = 'test_insert'
     file_pref_2 = 'test_del'
     generate_cascade_inserts(path, file_pref_1, [[0, 1000, 'AAAAAAAAAAAAAAAAAAAA'],
