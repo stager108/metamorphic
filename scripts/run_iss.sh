@@ -15,10 +15,10 @@ bwa index ./$TESTDIR/genome.fa &&\
      ./$TESTDIR/reads_R2.fastq > ./$TESTDIR/$BAMFILE.sam
 
 # samtools sort
-samtools view -S -b ./$TESTDIR/$BAMFILE.sam > ./$TESTDIR/$BAMFILE\_n.bam
-samtools sort -o ./$TESTDIR/$BAMFILE.bam ./$TESTDIR/$BAMFILE\_n.bam
+samtools view -S -b ./$TESTDIR/$BAMFILE.sam > ./$TESTDIR/${BAMFILE}_n.bam
+samtools sort -o ./$TESTDIR/$BAMFILE.bam ./$TESTDIR/${BAMFILE}_n.bam
 
 java -jar ./picard/build/libs/picard.jar BuildBamIndex \
       -I ./$TESTDIR/$BAMFILE.bam -O ./$TESTDIR/$BAMFILE.bam.bai
       
-rm ./$TESTDIR/$BAMFILE\_n* 
+rm ./$TESTDIR/${BAMFILE}_n* 
