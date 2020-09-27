@@ -1,17 +1,18 @@
 #!/bin/sh 
 
 TESTDIR=$1
-BAMFILE=$2
+FASTAFILE=$2
+BAMFILE=$3
 
 mkdir $TESTDIR
 cp ./carsonella/* ./$TESTDIR
 
 # InSilicoSeq
-iss generate --genomes ./$TESTDIR/genome.fa --model miseq --output ./$TESTDIR/reads -n 30k
+iss generate --genomes ./$TESTDIR/$FASTAFILE --model miseq --output ./$TESTDIR/reads -n 30k
 
 # BWA
-bwa index ./$TESTDIR/genome.fa &&\
-     bwa mem ./$TESTDIR/genome.fa ./$TESTDIR/reads_R1.fastq \
+bwa index ./$TESTDIR/$FASTAFILE &&\
+     bwa mem ./$TESTDIR/$FASTAFILE ./$TESTDIR/reads_R1.fastq \
      ./$TESTDIR/reads_R2.fastq > ./$TESTDIR/$BAMFILE.sam
 
 # samtools sort
