@@ -81,6 +81,7 @@ RUN rm *.tar.bz2 *.tgz
 
 RUN mkdir carsonella
 RUN mkdir scripts
+RUN mkdir results
 COPY carsonella_rudii carsonella
 COPY scripts scripts
 

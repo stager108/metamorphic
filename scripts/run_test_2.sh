@@ -1,15 +1,28 @@
-#!/bin/sh 
+#!/bin/sh
 
 TESTDIR=$1
-TESTCONFIG=$2
-N=$3
+TESTCONFIG=point_mut
+RUNDIR=tmp_run_dir
+N=$2
+mkdir $TESTDIR
+cp ./carsonella/genome.fa $TESTDIR/genome_rand_0.fa
+. ./scripts/run_iss.sh $TESTDIR genome_rand_0.fa aligned
 
-for ((i=1; i<=$N; i++)) do
-    . ./scripts/run_iss.sh $TESTDIR aligned
-    . ./scripts/run_surg.sh $TESTDIR aligned mut $TESTCONFIG_$i.txt
-    . ./scripts/run_strelka.sh $TESTDIR aligned mut
+for i in `seq 1 $N`
+do
+  TESTDIR=$1
+  RUNDIR=tmp_run_dir
+  mkdir $RUNDIR
 
-    gzip -d ./$TESTDIR/strelka/results/variants/somatic.indels.vcf.gz 
-    mv ./$TESTDIR/strelka/results/variants/somatic.indels.vcf $TESTCONFIG_$i.vcf
-    rm -r $TESTDIR 
+  ./scripts/generate_mut.exe $TESTDIR/genome_rand_0.fa $TESTDIR/genome_rand_${i}.fa -r
+  . ./scripts/run_iss.sh $TESTDIR genome_rand_${i}.fa mutated
+  cp $TESTDIR/* $RUNDIR
+  cp ./carsonella/genome.fa $RUNDIR
+  cp ./carsonella/genome.fa.fai $RUNDIR
+
+  . ./scripts/run_strelka.sh $RUNDIR aligned mutated
+
+  gzip -d ./$RUNDIR/strelka/results/variants/somatic.indels.vcf.gz
+  mv ./$RUNDIR/strelka/results/variants/somatic.indels.vcf ./results/genome_rand_${i}.vcf
+  rm -r $RUNDIR
 done

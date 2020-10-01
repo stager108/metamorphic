@@ -14,7 +14,7 @@ do
   RUNDIR=tmp_run_dir
   mkdir $RUNDIR
 
-  ./scripts/generate_mut.exe $TESTDIR/genome_mut_$((i-1)).fa $TESTDIR/genome_mut_${i}.fa
+  ./scripts/generate_mut.exe $TESTDIR/genome_mut_$((i-1)).fa $TESTDIR/genome_mut_${i}.fa -p
   . ./scripts/run_iss.sh $TESTDIR genome_mut_${i}.fa mutated
   cp $TESTDIR/* $RUNDIR
   cp ./carsonella/genome.fa $RUNDIR
