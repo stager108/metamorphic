@@ -3,6 +3,7 @@
 TESTDIR=$1
 FASTAFILE=$2
 BAMFILE=$3
+GENOME=genome.fa
 
 mkdir $TESTDIR
 cp ./carsonella/* ./$TESTDIR
@@ -11,8 +12,8 @@ cp ./carsonella/* ./$TESTDIR
 iss generate --genomes ./$TESTDIR/$FASTAFILE --model miseq --output ./$TESTDIR/reads -n 30k
 
 # BWA
-bwa index ./$TESTDIR/$FASTAFILE &&\
-     bwa mem ./$TESTDIR/$FASTAFILE ./$TESTDIR/reads_R1.fastq \
+bwa index ./$TESTDIR/$GENOME &&\
+     bwa mem ./$TESTDIR/$GENOME ./$TESTDIR/reads_R1.fastq \
      ./$TESTDIR/reads_R2.fastq > ./$TESTDIR/$BAMFILE.sam
 
 # samtools sort
