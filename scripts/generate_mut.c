@@ -105,7 +105,7 @@ int add_insertions(char *argv[]) {
     char tmpfile[8] = "raw.txt";
     FILE *infile, *outfile;
     char a;
-    double prob = 0.001;
+    double prob = 0.0001;
     int filesize = 0;
     infile = fopen(argv[1], "r");
     outfile = fopen(tmpfile, "w");
@@ -113,7 +113,7 @@ int add_insertions(char *argv[]) {
     while (fscanf(infile, "%c", &a) == 1) {
         double p = randfrom(0.0, 1.0);
         if (p < prob) {
-            int length = (rand() % 1000) + 1;
+            int length = (rand() % 100) + 1;
             for (int i = 0; i < length; i += 1) {
                 fprintf(outfile, "%c", random_nucleotide('A'));
                 filesize += 1;
@@ -138,14 +138,14 @@ int add_deletions(char *argv[]) {
     char tmpfile[8] = "raw.txt";
     char a;
     int filesize = 0;
-    double prob = 0.001;
+    double prob = 0.0001;
     infile = fopen(argv[1], "r");
     outfile = fopen(tmpfile, "w");
     fscanf(infile, "%[^\n]", c);
     while (fscanf(infile, "%c", &a) == 1) {
         double p = randfrom(0.0, 1.0);
         if (p < prob) {
-            int length = (rand() % 1000) + 1;
+            int length = (rand() % 100) + 1;
             for (int i = 0; i < length; i += 1) {
                 if (fscanf(infile, "%c", &a) != 1) {
                     break;

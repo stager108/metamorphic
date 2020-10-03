@@ -9,7 +9,7 @@ mkdir $TESTDIR
 cp ./carsonella/* ./$TESTDIR
 
 # InSilicoSeq
-iss generate --genomes ./$TESTDIR/$FASTAFILE --model miseq --output ./$TESTDIR/reads -n 30k
+iss generate --genomes ./$TESTDIR/$FASTAFILE --model miseq --output ./$TESTDIR/reads -n 50k
 
 # BWA
 bwa index ./$TESTDIR/$GENOME &&\
