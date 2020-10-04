@@ -7,7 +7,7 @@ N=$2
 TYPE=$3
 mkdir $TESTDIR
 cp ./carsonella/genome.fa $TESTDIR/genome_mut_${TYPE}0.fa
-. ./scripts/run_iss.sh $TESTDIR genome_mut_${TYPE}0.fa aligned
+. ./scripts/run_iss.sh $TESTDIR genome_mut_${TYPE}0.fa aligned 50
 
 for i in `seq 1 $N`
 do
@@ -16,7 +16,7 @@ do
   mkdir $RUNDIR
 
   ./scripts/generate_mut.exe $TESTDIR/genome_mut_${TYPE}$((i-1)).fa $TESTDIR/genome_mut_${TYPE}${i}.fa -${TYPE}
-  . ./scripts/run_iss.sh $TESTDIR genome_mut_${TYPE}${i}.fa mutated
+  . ./scripts/run_iss.sh $TESTDIR genome_mut_${TYPE}${i}.fa mutated 50
   cp $TESTDIR/* $RUNDIR
   cp ./carsonella/genome.fa $RUNDIR
   cp ./carsonella/genome.fa.fai $RUNDIR

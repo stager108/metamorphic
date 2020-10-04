@@ -31,7 +31,7 @@ int fix_header(char *tmpfile, char *outputfile, int length) {
     infile = fopen(tmpfile, "r");
     outfile = fopen(outputfile, "w");
     int cur_length = 0;
-    fprintf(outfile, ">Chromosome dna:chromosome chromosome:ASM1036v1:Chromosome:1:%d:1 REF", length);
+    fprintf(outfile, ">Chromosome dna:chromosome chromosome:ASM1036v1:Chromosome:1:%d:1 REF\n", length);
     while (fscanf(infile, "%c", &a) == 1) {
         cur_length += is_nucleotide(a);
         if (is_nucleotide(a) == 1) {

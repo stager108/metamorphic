@@ -6,7 +6,7 @@ RUNDIR=tmp_run_dir
 N=$2
 mkdir $TESTDIR
 cp ./carsonella/genome.fa $TESTDIR/genome_rand_0.fa
-. ./scripts/run_iss.sh $TESTDIR genome_rand_0.fa aligned
+. ./scripts/run_iss.sh $TESTDIR genome_rand_0.fa aligned 30
 
 for i in `seq 1 $N`
 do
@@ -15,7 +15,7 @@ do
   mkdir $RUNDIR
 
   ./scripts/generate_mut.exe $TESTDIR/genome_rand_0.fa $TESTDIR/genome_rand_${i}.fa -r
-  . ./scripts/run_iss.sh $TESTDIR genome_rand_${i}.fa mutated
+  . ./scripts/run_iss.sh $TESTDIR genome_rand_${i}.fa mutated 30
   cp $TESTDIR/* $RUNDIR
   cp ./carsonella/genome.fa $RUNDIR
   cp ./carsonella/genome.fa.fai $RUNDIR

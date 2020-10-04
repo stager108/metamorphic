@@ -3,13 +3,14 @@
 TESTDIR=$1
 FASTAFILE=$2
 BAMFILE=$3
+SIZE=$4
 GENOME=genome.fa
 
 mkdir $TESTDIR
 cp ./carsonella/* ./$TESTDIR
 
 # InSilicoSeq
-iss generate --genomes ./$TESTDIR/$FASTAFILE --model miseq --output ./$TESTDIR/reads -n 50k
+iss generate --genomes ./$TESTDIR/$FASTAFILE --model miseq --output ./$TESTDIR/reads -n ${SIZE}k
 
 # BWA
 bwa index ./$TESTDIR/$GENOME &&\

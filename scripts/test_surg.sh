@@ -4,8 +4,8 @@ TESTDIR=$1
 TESTCONFIG=$2
 RUNDIR=tmp_run_dir
 N=$3
-. ./scripts/run_iss.sh $TESTDIR genome.fa aligned
-. ./scripts/run_iss.sh $TESTDIR genome.fa mutated
+. ./scripts/run_iss.sh $TESTDIR genome.fa aligned 30
+. ./scripts/run_iss.sh $TESTDIR genome.fa mutated 30
 
 for i in `seq 1 $N`
 do
