@@ -75,7 +75,14 @@ int add_point_mutations(char *argv[]) {
     fscanf(infile, "%[^\n]", c);
     fprintf(outfile, "%s", c);
     while (fscanf(infile, "%c", &a) == 1) {
-        fprintf(outfile, "%c", random_point_mut(a, prob));
+        int x = rand() % 3;
+        // 0 - del, 1 - replace, 2 - insert 
+        if(x > 0) {
+            fprintf(outfile, "%c", random_point_mut(a, prob));
+        }
+        if(x > 1){
+            fprintf(outfile, "%c", a);
+        }
     }
     fclose(infile);
     fclose(outfile);
@@ -113,7 +120,7 @@ int add_insertions(char *argv[]) {
     while (fscanf(infile, "%c", &a) == 1) {
         double p = randfrom(0.0, 1.0);
         if (p < prob) {
-            int length = (rand() % 100) + 1;
+            int length = (rand() % 50) + 1;
             for (int i = 0; i < length; i += 1) {
                 fprintf(outfile, "%c", random_nucleotide('A'));
                 filesize += 1;
@@ -145,7 +152,7 @@ int add_deletions(char *argv[]) {
     while (fscanf(infile, "%c", &a) == 1) {
         double p = randfrom(0.0, 1.0);
         if (p < prob) {
-            int length = (rand() % 100) + 1;
+            int length = (rand() % 50) + 1;
             for (int i = 0; i < length; i += 1) {
                 if (fscanf(infile, "%c", &a) != 1) {
                     break;
