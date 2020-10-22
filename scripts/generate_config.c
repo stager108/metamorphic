@@ -92,16 +92,16 @@ int add_point_mutations(char *argv[]) {
                 int x = rand() % 3;
                 switch (x) {
                     case 0:
-                        write_varfile_mutation(outfile, "DEL", i, 1);
+                        write_varfile_mutation(outfile, "DEL", i + 1, 1);
                         break;
                     case 1:
                         mut_random_point(a);
-                        write_varfile_mutation(outfile, "INS", i, 1);
-                        write_varfile_mutation(outfile, "DEL", i, 1);
+                        write_varfile_mutation(outfile, "INS", i + 1, 1);
+                        write_varfile_mutation(outfile, "DEL", i + 1, 1);
                         break;
                     case 2:
                         random_point();
-                        write_varfile_mutation(outfile, "INS", i, 1);
+                        write_varfile_mutation(outfile, "INS", i + 1, 1);
                         break;
                 }
             }
@@ -130,15 +130,15 @@ int add_one_type_mutations(char *argv[], char type) {
             mutation[length] = '\0';
             switch (type) {
                 case 'r':
-                    write_varfile_mutation(outfile, "INS", filesize, 1);
+                    write_varfile_mutation(outfile, "INS", filesize + 1, 1);
                     length = (rand() % (STRELKA_CONST - 1)) + 1;
-                    write_varfile_mutation(outfile, "DEL", filesize, length);
+                    write_varfile_mutation(outfile, "DEL", filesize + 1, length + 1);
                     break;
                 case 'd':
-                    write_varfile_mutation(outfile, "DEL", filesize, length);
+                    write_varfile_mutation(outfile, "DEL", filesize + 1, length + 1);
                     break;
                 case 'i':
-                    write_varfile_mutation(outfile, "INS", filesize, 1);
+                    write_varfile_mutation(outfile, "INS", filesize + 1, 1);
                     break;
             }
             filesize += 4;
