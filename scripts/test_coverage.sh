@@ -5,27 +5,56 @@ TESTCONFIG=point_mut
 RUNDIR=tmp_run_dir
 N=$2
 TYPE=$3
+GENOME=genome.fa
+
 mkdir $TESTDIR
-cp ./carsonella/genome.fa $TESTDIR/genome_cov_${TYPE}0.fa
-. ./scripts/run_iss.sh $TESTDIR genome_cov_${TYPE}0.fa aligned 50
-./scripts/generate_mut.exe $TESTDIR/genome_cov_${TYPE}0.fa $TESTDIR/genome_cov_${TYPE}1.fa -${TYPE}
+cp ./carsonella/* ./$TESTDIR
+
+# normal
+iss generate --genomes ./$TESTDIR/$GENOME --model miseq \
+    --output ./$TESTDIR/reads -n $(((N+3 - i)*10))k
+    
+bwa index ./$TESTDIR/$GENOME &&\
+     bwa mem ./$TESTDIR/$GENOME ./$TESTDIR/reads_R1.fastq \
+     ./$TESTDIR/reads_R2.fastq > ./$TESTDIR/aligned.sam
+
+# tumor
+./scripts/generate_mut.exe $TESTDIR/$GENOME $TESTDIR/genome_mut_${TYPE}.fa \
+     $TESTDIR/config_${TYPE}.txt -${TYPE}
+
+iss generate --genomes ./$TESTDIR/genome_mut_${TYPE}.fa --model miseq \
+    --output ./$TESTDIR/reads -n $(((N+3 - i)*10))k
+
+bwa index ./$TESTDIR/$GENOME &&\
+     bwa mem ./$TESTDIR/$GENOME ./$TESTDIR/reads_R1.fastq \
+     ./$TESTDIR/reads_R2.fastq > ./$TESTDIR/mutated.sam
+
+# test pack
+./scripts/generate_pack.exe $TESTDIR/mutated.sam $TESTDIR/mutated_ $N -s
 
 
-for i in `seq 1 $N`
+for i in `seq 0 $N`
 do
+
+  samtools view -S -b ./$TESTDIR/mutated_0${i}.sam > ./$TESTDIR/mutated_0${i}_n.bam
+  samtools sort -o ./$TESTDIR/mutated_0${i}.bam ./$TESTDIR/mutated_0${i}_n.bam
+
+  java -jar ./picard/build/libs/picard.jar BuildBamIndex \
+        -I ./$TESTDIR/mutated_0${i}.bam -O ./$TESTDIR/mutated_0${i}.bam.bai
+      
+  rm ./$TESTDIR/aligned_n* 
+
   TESTDIR=$1
   RUNDIR=tmp_run_dir
   mkdir $RUNDIR
-  
-  . ./scripts/run_iss.sh $TESTDIR genome_mut_${TYPE}1.fa mutated $(((N+3 - i)*10))
   
   cp $TESTDIR/* $RUNDIR
   cp ./carsonella/genome.fa $RUNDIR
   cp ./carsonella/genome.fa.fai $RUNDIR
 
-  . ./scripts/run_strelka.sh $RUNDIR aligned mutated
+  . ./scripts/run_strelka.sh $RUNDIR aligned mutated_0${i}
 
   gzip -d ./$RUNDIR/strelka/results/variants/somatic.indels.vcf.gz
-  mv ./$RUNDIR/strelka/results/variants/somatic.indels.vcf ./results/genome_mut_${TYPE}$(((N+3 - i)*10)).vcf
+  mv ./$RUNDIR/strelka/results/variants/somatic.indels.vcf ./results/genome_mut_${TYPE}_0${i}.vcf
   rm -r $RUNDIR
 done

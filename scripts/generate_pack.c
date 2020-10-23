@@ -22,7 +22,11 @@ int generate_tests(char *argv[], char opt) {
     output[len] = '0';
     output[len + 1] = '0';
     output[len + 2] = '\0';
-    strcat(output, ".txt");
+    if (opt == 's'){    
+        strcat(output, ".sam");
+    } else {    
+        strcat(output, ".txt");
+    }
     printf("%s\n", output);
     double prob = 1.0;
     for (int i = 0; i < n; i += 1) {
@@ -80,7 +84,11 @@ int generate_tests(char *argv[], char opt) {
             output[len + 1] = '0' + (char) ((i + 1) % 10);
             output[len + 2] = '\0';
         }
-        strcat(output, ".txt");
+        if (opt == 's'){    
+            strcat(output, ".sam");
+        } else {    
+            strcat(output, ".txt");
+        }
         printf("%s\n", output);
         prob = 1.0 * (n - i - 1) / (n - i);
     }
