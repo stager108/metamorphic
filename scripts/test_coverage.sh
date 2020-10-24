@@ -17,6 +17,12 @@ iss generate --genomes ./$TESTDIR/$GENOME --model miseq \
 bwa index ./$TESTDIR/$GENOME &&\
      bwa mem ./$TESTDIR/$GENOME ./$TESTDIR/reads_R1.fastq \
      ./$TESTDIR/reads_R2.fastq > ./$TESTDIR/aligned.sam
+     
+samtools view -S -b ./$TESTDIR/aligned.sam > ./$TESTDIR/aligned_n.bam
+samtools sort -o ./$TESTDIR/aligned.bam ./$TESTDIR/aligned_n.bam
+
+java -jar ./picard/build/libs/picard.jar BuildBamIndex \
+        -I ./$TESTDIR/aligned.bam -O ./$TESTDIR/aligned.bam.bai
 
 # tumor
 ./scripts/generate_mut.exe $TESTDIR/$GENOME $TESTDIR/genome_mut_${TYPE}.fa \
@@ -31,11 +37,13 @@ bwa index ./$TESTDIR/$GENOME &&\
 
 # test pack
 ./scripts/generate_pack.exe $TESTDIR/mutated.sam $TESTDIR/mutated_ $N -s
+TESTDIR=$1
+mkdir ./results/$TESTDIR
 
-
-for i in `seq 0 $N`
+for i in `seq 0 $((N-1))`
 do
-
+  TESTDIR=$1
+  RUNDIR=tmp_run_dir
   samtools view -S -b ./$TESTDIR/mutated_0${i}.sam > ./$TESTDIR/mutated_0${i}_n.bam
   samtools sort -o ./$TESTDIR/mutated_0${i}.bam ./$TESTDIR/mutated_0${i}_n.bam
 
@@ -53,8 +61,10 @@ do
   cp ./carsonella/genome.fa.fai $RUNDIR
 
   . ./scripts/run_strelka.sh $RUNDIR aligned mutated_0${i}
-
+  
+  TESTDIR=$1
+  RUNDIR=tmp_run_dir
   gzip -d ./$RUNDIR/strelka/results/variants/somatic.indels.vcf.gz
-  mv ./$RUNDIR/strelka/results/variants/somatic.indels.vcf ./results/genome_mut_${TYPE}_0${i}.vcf
+  mv ./$RUNDIR/strelka/results/variants/somatic.indels.vcf ./results/$TESTDIR/genome_mut_${TYPE}_0${i}.vcf
   rm -r $RUNDIR
 done
