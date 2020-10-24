@@ -11,7 +11,10 @@ N=$3
 ./scripts/generate_config.exe carsonella/genome.fa $TESTDIR/general_config.txt -$MODE
 ./scripts/generate_pack.exe $TESTDIR/general_config.txt $TESTDIR/$TESTPREFIX $N -t
 
-for i in `seq 1 $N`
+TESTDIR=$1
+mkdir ./results/$TESTDIR
+
+for i in `seq 0 $((N-1))`
 do
   TESTDIR=$1
   TESTPREFIX=$2
@@ -20,10 +23,12 @@ do
   cp $TESTDIR/* $RUNDIR
   cp ./carsonella/genome.fa $RUNDIR
   cp ./carsonella/genome.fa.fai $RUNDIR
-  . ./scripts/run_surg.sh $RUNDIR mutated ${TESTPREFIX}_0${i}.txt
+  . ./scripts/run_surg.sh $RUNDIR mutated $TESTDIR/${TESTPREFIX}0${i}.txt
   . ./scripts/run_strelka.sh $RUNDIR aligned mutated_mut
 
   gzip -d ./$RUNDIR/strelka/results/variants/somatic.indels.vcf.gz 
-  mv ./$RUNDIR/strelka/results/variants/somatic.indels.vcf ${TESTPREFIX}_${i}.vcf
+  TESTDIR=$1
+  mv ./$RUNDIR/strelka/results/variants/somatic.indels.vcf ./results/$TESTDIR/${TESTPREFIX}_${i}.vcf
   rm -r $RUNDIR
 done
+

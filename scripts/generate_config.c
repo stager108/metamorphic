@@ -168,7 +168,7 @@ int main(int argc, char *argv[]) {
                 add_one_type_mutations(argv, 'r');
                 break;
             default:
-                fprintf(stderr, "Usage: %s [-pr] [input file, output file]\n", argv[0]);
+                fprintf(stderr, "Usage: %s [-dipr] [input file, output file]\n", argv[0]);
                 fprintf(stderr, "-p point mutations -i insertions -d deletions -r replacements\n");
                 exit(EXIT_FAILURE);
         }
