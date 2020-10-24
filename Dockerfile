@@ -85,3 +85,5 @@ RUN mkdir results
 COPY carsonella_rudii carsonella
 COPY scripts scripts
 RUN gcc ./scripts/generate_mut.c -o ./scripts/generate_mut.exe
+RUN gcc ./scripts/generate_config.c -o ./scripts/generate_config.exe
+RUN gcc ./scripts/generate_pack.c -o ./scripts/generate_pack.exe
