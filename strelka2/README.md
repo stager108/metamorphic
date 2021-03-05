@@ -2,7 +2,7 @@
 
 This is a prototype of pipeline uses metamorphic testing for bioinformatics tool named Strelka2.
 The purpose of that was to check if this method is usable for testing pipelines.
-Some of test scripts uses wrong problem formulation, so they're out of use.
+Some of test scripts use wrong problem formulation, so they're out of use.
 
 Please build and run Docker image and use the following commands to run tests.
 
