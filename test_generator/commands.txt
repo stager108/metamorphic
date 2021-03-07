@@ -1,0 +1,12 @@
+docker build -t bd .
+docker run -it -v "/dir1:/dir2:" bd /bin/bash
+gzip -d somatic.indels.vcf.gz
+for i in *.vcf;do grep -v "##" <$i  >> res.txt;done
+
+
+grep "##" < first.vcf >res.txt
+for i in *.vcf;do grep -v "##" <$i >> res.txt;done
+
+gcc ./scripts/generate_mut.c -o ./scripts/generate_mut.exe
+
+
