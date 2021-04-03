@@ -5,6 +5,39 @@
 #include <string.h>
 #include <regex.h>
 
+const int MAX_SMALL_MUT_SIZE = 50;
+const int MIN_COPY_SIZE = 10000;
+const int COPY_INTERVAL = 20000;
+
+const double INDEL_PROBABILITY = 0.0001;
+const double COPYNUMBER_PROBABILITY = 0.000001;
+const double POINT_MUTATION_PROBABILITY = 0.005;
+
+
+char header[1000];
+FILE *infile, *outfile, *config, *inner_config;
+char a;
+
+char tmp_file[8] = "raw.txt";
+
+int filesize = 0;
+
+void open_files(char *argv[]) {
+    infile = fopen(argv[1], "r");
+    outfile = fopen(tmp_file, "w");
+    config = fopen(argv[3], "w");
+    char *inn_config_name = (char *) malloc(strlen(argv[3]) + 1);
+    strcpy(inn_config_name, argv[3]);
+    inner_config = fopen(strcat(inn_config_name, ".inner"), "w");
+    free(inn_config_name);
+}
+
+void close_files() {
+    fclose(infile);
+    fclose(outfile);
+    fclose(config);
+    fclose(inner_config);
+}
 
 double randfrom(double min, double max) {
     double range = (max - min);
@@ -34,8 +67,8 @@ char *get_chromosome(char *header) {
     while (header[i] != ' ') {
         i++;
     }
-    char *substr = (char*)malloc((size_t)(i));
-    strncpy(substr, header + 1, (size_t)(i));
+    char *substr = (char *) malloc((size_t) (i));
+    strncpy(substr, header + 1, (size_t) (i));
     return substr;
 }
 
@@ -46,15 +79,15 @@ char *fix_header_string(char *txt, int new1, char *target) {
     char num[11];
     int i, sc[2], j = 0;
     sprintf(num, "%d", new1);
-    
-    int len_num = (int)strlen(num);
-    int len_text = (int)strlen(txt);
-    
+
+    int len_num = (int) strlen(num);
+    int len_text = (int) strlen(txt);
+
     for (i = len_text - 1; (i >= 0) && (j < 2); i--)
         if (txt[i] == ':')
             sc[j++] = i;
     j = 0;
-    
+
     for (i = 0; i <= sc[1]; i++)
         target[j++] = txt[i];
     for (i = 0; i < len_num; i++)
@@ -66,11 +99,10 @@ char *fix_header_string(char *txt, int new1, char *target) {
     return target;
 }
 
-int fix_header(char *tmpfile, char *outputfile, int length, char *header) {
-    FILE *infile, *outfile;
+int fix_header(char *out_file, int length) {
     char a;
-    infile = fopen(tmpfile, "r");
-    outfile = fopen(outputfile, "w");
+    infile = fopen(tmp_file, "r");
+    outfile = fopen(out_file, "w");
     int cur_length = 0;
     int header_length = strlen(header);
     char target[header_length + 1];
@@ -109,16 +141,7 @@ char random_point_mut(char inp, double prob) {
 }
 
 int add_point_mutations(char *argv[]) {
-    char a, header[1000];
-    double prob = 0.005;
-    FILE *infile, *outfile, *config, *inner_config;
-
-    char tmpfile[8] = "raw.txt";
-
-    infile = fopen(argv[1], "r");
-    outfile = fopen(tmpfile, "w");
-    config = fopen(argv[3], "w");
-    inner_config = fopen(strcat(argv[3], ".inner"), "w");
+    open_files(argv);
     fscanf(infile, "%[^\n]", header);
     char *chromosome = get_chromosome(header);
 
@@ -126,9 +149,9 @@ int add_point_mutations(char *argv[]) {
     int filesize = 0;
     while (fscanf(infile, "%c", &a) == 1) {
         int x = rand() % 3;
-        char b = random_point_mut(a, prob);
+        char b = random_point_mut(a, POINT_MUTATION_PROBABILITY);
         double p = randfrom(0.0, 1.0);
-        if ((is_nucleotide(a)) & (p < prob)) {
+        if ((is_nucleotide(a)) & (p < POINT_MUTATION_PROBABILITY)) {
             // 0 - del, 1 - replace, 2 - insert
             if (x == 0) {
                 fprintf(config, "%s %d %d 1.00 DEL \n", chromosome, i + 1, i + 2);
@@ -157,18 +180,13 @@ int add_point_mutations(char *argv[]) {
             i += is_nucleotide(a);
         }
     }
-    fclose(infile);
-    fclose(outfile);
-    fclose(config);
-    fclose(inner_config);
-    fix_header(tmpfile, argv[2], filesize, header);
+    close_files();
+    fix_header(argv[2], filesize);
     return 0;
 }
 
 int generate_random(char *argv[]) {
     char c[1000];
-    FILE *infile, *outfile;
-    char a;
     infile = fopen(argv[1], "r");
     outfile = fopen(argv[2], "w");
     fscanf(infile, "%[^\n]", c);
@@ -181,36 +199,24 @@ int generate_random(char *argv[]) {
     return 0;
 }
 
-
 int add_insertions(char *argv[]) {
 
-    char header[1000];
-    char tmpfile[8] = "raw.txt";
-    FILE *infile, *outfile, *config, *inner_config;
-    char a;
-    double prob = 0.0001;
-    int filesize = 0;
-    infile = fopen(argv[1], "r");
-    outfile = fopen(tmpfile, "w");
-    config = fopen(argv[3], "w");
-    inner_config = fopen(strcat(argv[3], ".inner"), "w");
-
+    open_files(argv);
     fscanf(infile, "%[^\n]", header);
     char *chromosome = get_chromosome(header);
 
     int position = 0;
     while (fscanf(infile, "%c", &a) == 1) {
         double p = randfrom(0.0, 1.0);
-        if (p < prob) {
-            int length = (rand() % 50) + 1;
+        if (p < INDEL_PROBABILITY) {
+            int length = (rand() % MAX_SMALL_MUT_SIZE) + 1;
             fprintf(config, "%s %d %d 1.00 INS ", chromosome, filesize + 1, filesize + 2);
-            fprintf(inner_config, "i %d %d ", filesize + 1, filesize + 2);
+            fprintf(inner_config, "i %d %d ", filesize, length);
 
             for (int i = 0; i < length; i += 1) {
                 char b = random_nucleotide('A');
                 fprintf(outfile, "%c", b);
                 fprintf(config, "%c", b);
-                fprintf(inner_config, "%c", b);
                 filesize += 1;
                 if (i % 60 == 0) {
                     fprintf(outfile, "%c", '\n');
@@ -223,34 +229,76 @@ int add_insertions(char *argv[]) {
         position += is_nucleotide(a);
         fprintf(outfile, "%c", a);
     }
-    fclose(infile);
-    fclose(outfile);
-    fclose(config);
-    fclose(inner_config);
-    fix_header(tmpfile, argv[2], filesize, header);
+    close_files();
+    free(chromosome);
+    fix_header(argv[2], filesize);
     return 0;
 }
 
+
+int add_copies(char *argv[]) {
+
+    open_files(argv);
+    fscanf(infile, "%[^\n]", header);
+    char *chromosome = get_chromosome(header);
+
+    char copy_buffer[COPY_INTERVAL + MIN_COPY_SIZE + 1];
+
+    int position = 0;
+    while (fscanf(infile, "%c", &a) == 1) {
+        double p = randfrom(0.0, 1.0);
+        if (p < COPYNUMBER_PROBABILITY) {
+            int length = (rand() % COPY_INTERVAL) + MIN_COPY_SIZE;
+
+            for (int i = 0; i < length; i++) {
+                if (fscanf(infile, "%c", &a) != 1) {
+                    length = i;
+                    break;
+                } else {
+                    filesize += 1;
+                    fprintf(outfile, "%c", a);
+                    copy_buffer[i] = a;
+                }
+            }
+
+            fprintf(config, "%s %d %d 1.00 INS ", chromosome, filesize + 1, filesize + 2);
+            fprintf(inner_config, "c %d %d ", filesize, length);
+
+            for (int i = 0; i < length; i += 1) {
+                fprintf(outfile, "%c", copy_buffer[i]);
+                fprintf(config, "%c", copy_buffer[i]);
+                filesize += 1;
+                if (i % 60 == 0) {
+                    fprintf(outfile, "%c", '\n');
+                }
+            }
+            fprintf(config, "%c", '\n');
+            fprintf(inner_config, "%c", '\n');
+        }
+        filesize += is_nucleotide(a);
+        position += is_nucleotide(a);
+        fprintf(outfile, "%c", a);
+    }
+
+    close_files();
+    free(chromosome);
+    fix_header(argv[2], filesize);
+    return 0;
+}
+
+
 int add_deletions(char *argv[]) {
-    char header[1000];
-    FILE *infile, *outfile, *config, *inner_config;
-    char tmpfile[8] = "raw.txt";
-    char a;
-    int filesize = 0;
-    double prob = 0.0001;
-    infile = fopen(argv[1], "r");
-    outfile = fopen(tmpfile, "w");
-    config = fopen(argv[3], "w");
-    inner_config = fopen(strcat(argv[3], ".inner"), "w");
+
+    open_files(argv);
     fscanf(infile, "%[^\n]", header);
     char *chromosome = get_chromosome(header);
     int i = 0;
     while (fscanf(infile, "%c", &a) == 1) {
         double p = randfrom(0.0, 1.0);
-        if (p < prob) {
-            int length = (rand() % 50) + 1;
+        if (p < INDEL_PROBABILITY) {
+            int length = (rand() % MAX_SMALL_MUT_SIZE) + 1;
             fprintf(config, "%s %d %d 1.00 DEL \n", chromosome, i + 1, i + length + 1);
-            fprintf(inner_config, "d %d %d\n", i + 1, i + length + 1);
+            fprintf(inner_config, "d %d %d\n", i, length);
             i += length;
             for (int j = 0; j < length; j += 1) {
                 if (fscanf(infile, "%c", &a) != 1) {
@@ -263,11 +311,9 @@ int add_deletions(char *argv[]) {
             i += is_nucleotide(a);
         }
     }
-    fclose(infile);
-    fclose(outfile);
-    fclose(config);
-    fclose(inner_config);
-    fix_header(tmpfile, argv[2], filesize, header);
+    close_files();
+    free(chromosome);
+    fix_header(argv[2], filesize);
     return 0;
 }
 
@@ -275,7 +321,7 @@ int main(int argc, char *argv[]) {
 
 //  int size = atoi(argv[3]);
     int opt;
-    while ((opt = getopt(argc, argv, "dipr")) != -1) {
+    while ((opt = getopt(argc, argv, "diprc")) != -1) {
         switch (opt) {
             case 'p':
                 add_point_mutations(argv);
@@ -289,9 +335,12 @@ int main(int argc, char *argv[]) {
             case 'i':
                 add_insertions(argv);
                 break;
+            case 'c':
+                add_copies(argv);
+                break;
             default:
                 fprintf(stderr, "Usage: %s [-pr] [input file, output file, output config file]\n", argv[0]);
-                fprintf(stderr, "-p point mutations -i insertions -d deletions -r random genome\n");
+                fprintf(stderr, "-p point mutations -i insertions -d deletions -r random genome -c copynumber\n");
                 exit(EXIT_FAILURE);
         }
     }
