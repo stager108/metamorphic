@@ -39,7 +39,7 @@ char random_nucleotide(char inp) {
 }
 
 int is_nucleotide(char inp) {
-    if ((inp != 'A') & (inp != 'G') & (inp != 'C') & (inp != 'T')) {
+    if ((inp != 'A') & (inp != 'G') & (inp != 'C') & (inp != 'T') & (inp != 'N')) {
         return 0;
     } else {
         return 1;
