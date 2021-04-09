@@ -8,7 +8,7 @@ N=$3
 ./scripts/run_iss.sh $TESTDIR genome.fa aligned 50
 ./scripts/run_iss.sh $TESTDIR genome.fa mutated 50
 
-./scripts/generate_config.exe carsonella/genome.fa $TESTDIR/general_config.txt -$MODE
+./scripts/generate_mut.exe carsonella/genome.fa $TESTDIR/general_config.txt -$MODE
 ./scripts/generate_pack.exe $TESTDIR/general_config.txt $TESTDIR/$TESTPREFIX $N -t
 
 TESTDIR=$1
@@ -20,10 +20,10 @@ do
   TESTPREFIX=$2
   RUNDIR=$1
   mkdir $RUNDIR
-  cp ./carsonella/genome.fa.fai $RUNDIR
-  ./scripts/run_surg.sh $RUNDIR mutated $TESTDIR/${TESTPREFIX}0${i}.txt $i
+  cp carsonella/genome.fa.fai $RUNDIR
+  ./scripts/run_surg_copy.sh $RUNDIR mutated $TESTDIR/${TESTPREFIX}0${i}.txt $i
   RUNDIR=$1
-  cp -r $RUNDIR ./results/
+  cp -r $RUNDIR results/
 
 done
 
