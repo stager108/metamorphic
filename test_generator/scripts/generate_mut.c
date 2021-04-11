@@ -10,7 +10,7 @@ const int MIN_COPY_SIZE = 10000;
 const int COPY_INTERVAL = 20000;
 
 const double INDEL_PROBABILITY = 0.0001;
-const double COPYNUMBER_PROBABILITY = 0.000001;
+const double COPYNUMBER_PROBABILITY = 0.0001;
 const double POINT_MUTATION_PROBABILITY = 0.005;
 
 
@@ -215,7 +215,7 @@ int add_copies(char *argv[]) {
                 }
             }
 
-            fprintf(config, "%s %d %d DUP %d 1.0 ", chromosome, filesize + 1, filesize + length + 1, rand() % 3 + 1);
+            fprintf(config, "%s %d %d BIGDUP %d 1.0 ", chromosome, filesize + 1, filesize + length + 1, rand() % 3 + 1);
             fprintf(inner_config, "c %d %d ", filesize, length);
             filesize += length;
             fprintf(config, "%c", '\n');

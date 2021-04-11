@@ -2,27 +2,23 @@
 
 TESTDIR=$1
 BAMFILE=$2
-TESTCONFIG=$3
-TESTPREFIX=$4
+OUTPUTFILE=$3
+TESTCONFIG=$4
+TESTPREFIX=$5
 
 # bamSurgeon
-addsv.py -v $TESTCONFIG -f ./$TESTDIR/$BAMFILE.bam -r ./$TESTDIR/genome.fa \
--o ./$TESTDIR/testregion_mut$TESTPREFIX.bam --aligner mem --seed 1234
+addsv.py -v ${TESTCONFIG} -f ./${TESTDIR}/${BAMFILE}.bam -r ./${TESTDIR}/genome.fa \
+-o ./${TESTDIR}/${TESTPREFIX}testregion_mut.bam --aligner mem --seed 1234
 
 # sort
-samtools sort -o ./$TESTDIR/$BAMFILE\_mut$TESTPREFIX.bam ./$TESTDIR/testregion_mut$TESTPREFIX.bam
+samtools sort -o ./${TESTDIR}/${OUTPUTFILE}.bam ./${TESTDIR}/${TESTPREFIX}testregion_mut.bam
 
-mv testregion_mut.addindel.test_indel.vcf  ./$TESTDIR/mut.vcf 
+mv ${TESTPREFIX}testregion_mut.addindel.test_indel.vcf  ./${TESTDIR}/${TESTPREFIX}mut.vcf 
 
 # indexing
 java -jar ./picard/build/libs/picard.jar BuildBamIndex \
-      -I ./$TESTDIR/$BAMFILE\_mut$TESTPREFIX.bam -O ./$TESTDIR/$BAMFILE\_mut$TESTPREFIX.bam.bai
-
-samtools fastq -@ 1 ./$TESTDIR/$BAMFILE\_mut$TESTPREFIX.bam \
--1 ./$TESTDIR/$BAMFILE\_mut${TESTPREFIX}_R1.fastq.gz \
--2 ./$TESTDIR/$BAMFILE\_mut${TESTPREFIX}_R2.fastq.gz
-
-
+      -I ./${TESTDIR}/${OUTPUTFILE}.bam -O ./${TESTDIR}/${OUTPUTFILE}.bam.bai
+      
 # delete garbage
 rm -r addindel*
 rm *addindel*   

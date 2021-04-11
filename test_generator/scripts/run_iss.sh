@@ -7,21 +7,21 @@ SIZE=$4
 GENOME=genome.fa
 
 mkdir $TESTDIR
-cp ./carsonella/* ./$TESTDIR
+cp /root/carsonella/* /root/$TESTDIR
 
 # InSilicoSeq
-iss generate --genomes ./$TESTDIR/$FASTAFILE --model miseq --output ./$TESTDIR/reads -n ${SIZE}k
+iss generate --genomes /root/$TESTDIR/$FASTAFILE --model miseq --output /root/$TESTDIR/reads -n ${SIZE}k
 
 # BWA
-bwa index ./$TESTDIR/$GENOME &&\
-     bwa mem ./$TESTDIR/$GENOME ./$TESTDIR/reads_R1.fastq \
-     ./$TESTDIR/reads_R2.fastq > ./$TESTDIR/$BAMFILE.sam
+bwa index /root/$TESTDIR/$GENOME &&\
+     bwa mem /root/$TESTDIR/$GENOME /root/$TESTDIR/reads_R1.fastq \
+     /root/$TESTDIR/reads_R2.fastq > /root/$TESTDIR/$BAMFILE.sam
 
 # samtools sort
-samtools view -S -b ./$TESTDIR/$BAMFILE.sam > ./$TESTDIR/${BAMFILE}_n.bam
-samtools sort -o ./$TESTDIR/$BAMFILE.bam ./$TESTDIR/${BAMFILE}_n.bam
+samtools view -S -b /root/$TESTDIR/$BAMFILE.sam > /root/$TESTDIR/${BAMFILE}_n.bam
+samtools sort -o /root/$TESTDIR/$BAMFILE.bam /root/$TESTDIR/${BAMFILE}_n.bam
 
-java -jar ./picard/build/libs/picard.jar BuildBamIndex \
-      -I ./$TESTDIR/$BAMFILE.bam -O ./$TESTDIR/$BAMFILE.bam.bai
+java -jar /root/picard/build/libs/picard.jar BuildBamIndex \
+      -I /root/$TESTDIR/$BAMFILE.bam -O /root/$TESTDIR/$BAMFILE.bam.bai
       
-rm ./$TESTDIR/${BAMFILE}_n* 
+rm /root/$TESTDIR/${BAMFILE}_n* 

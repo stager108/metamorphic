@@ -22,8 +22,9 @@ for i in `seq 0 $((N-1))`
 do
   TESTDIR=$1
   TESTPREFIX=$2
-  ./scripts/run_surg_copy.sh ${TESTDIR} mutated ${TESTPREFIX}0${i} ${TESTDIR}/${TESTPREFIX}0${i}.txt ${TESTPREFIX}
+  cp carsonella/genome.fa.fai ${TESTDIR}
+  ./scripts/run_surg_ind.sh ${TESTDIR} mutated ${TESTPREFIX}0${i} ${TESTDIR}/${TESTPREFIX}0${i}.txt ${TESTPREFIX}
 done
 
-
 cp -r ${TESTDIR} results/
+

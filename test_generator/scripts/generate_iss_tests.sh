@@ -8,7 +8,7 @@ N=$3
 
 mkdir ${RUNDIR}
 mkdir ${TESTDIR}
-./scripts/run_iss.sh ${TESTDIR} genome.fa aligned 10
+./scripts/run_iss.sh ${TESTDIR} genome.fa aligned 50
 
 ./scripts/generate_mut.exe carsonella/genome.fa ${TESTDIR}/general_config.txt -${MODE}
 ./scripts/generate_pack.exe ${TESTDIR}/general_config.txt.inner ${TESTDIR}/${TESTPREFIX} $N -t

@@ -8,6 +8,8 @@ RUN pip install --upgrade pip && \
     pip install cython pysam && \
     pip3 install InSilicoSeq
 
+
+RUN mkdir $HOME/bin
 ENV PATH=$PATH:$HOME/bin
 
 WORKDIR /root
@@ -38,8 +40,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     bwa \
     && rm -rf /var/lib/apt/lists/*
 
-
-RUN mkdir $HOME/bin
 
 RUN wget https://www.ebi.ac.uk/~zerbino/velvet/velvet_1.2.10.tgz &&\
     tar -xvzf velvet_1.2.10.tgz && make -C velvet_1.2.10 &&\
@@ -72,8 +72,12 @@ RUN mkdir carsonella &&\
 RUN apt-get update && apt-get install nano mlocate && updatedb
     
 COPY scripts scripts
+COPY carsonella_ruddii carsonella
 
-RUN gcc ./scripts/generate_config.c -o ./scripts/generate_config.exe && \
-     gcc ./scripts/generate_pack.c -o ./scripts/generate_pack.exe
+RUN gcc ./scripts/generate_mut.c -o ./scripts/generate_mut.exe && \
+     gcc ./scripts/generate_pack.c -o ./scripts/generate_pack.exe &&\
+     gcc ./scripts/apply_mut.c -o ./scripts/apply_mut.exe
+     
+RUN cp velvet_1.2.10/velvetg /bin && cp velvet_1.2.10/velveth /bin
 
-CMD chmod a+x scripts/* && ls -l scripts && ./scripts/test_surg_casc_mut.sh test1 test_ins1_ 3 i
+#CMD chmod a+x scripts/* && ./scripts/test_surg_casc_mut.sh test1 test_ins1_ 3 i
