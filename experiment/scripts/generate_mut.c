@@ -6,11 +6,11 @@
 #include <regex.h>
 
 const int MAX_SMALL_MUT_SIZE = 50;
-const int MIN_COPY_SIZE = 10000;
-const int COPY_INTERVAL = 20000;
+const int MIN_COPY_SIZE = 5000;
+const int COPY_INTERVAL = 5000;
 
 const double INDEL_PROBABILITY = 0.0001;
-const double COPYNUMBER_PROBABILITY = 0.000001;
+const double COPYNUMBER_PROBABILITY = 0.0001;
 const double POINT_MUTATION_PROBABILITY = 0.005;
 
 
