@@ -8,5 +8,3 @@ grep "##" < first.vcf >res.txt
 for i in *.vcf;do grep -v "##" <$i >> res.txt;done
 
 gcc ./scripts/generate_mut.c -o ./scripts/generate_mut.exe
-
-

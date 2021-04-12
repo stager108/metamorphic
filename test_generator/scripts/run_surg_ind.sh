@@ -5,9 +5,10 @@ BAMFILE=$2
 OUTPUTFILE=$3
 TESTCONFIG=$4
 TESTPREFIX=$5
+GENOME=$6
 
 # bamSurgeon
-addindel.py -v ${TESTCONFIG} -f ./${TESTDIR}/${BAMFILE}.bam -r ./${TESTDIR}/genome.fa \
+addindel.py -v ${TESTCONFIG} -f ./${TESTDIR}/${BAMFILE}.bam -r ${GENOME} \
 -o ./${TESTDIR}/${TESTPREFIX}testregion_mut.bam  --picardjar ./picard/build/libs/picard.jar --aligner mem --seed 1234
 
 # sort

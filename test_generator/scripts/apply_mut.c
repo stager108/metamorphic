@@ -173,12 +173,12 @@ int add_mutations(char *argv[]) {
 
             case 'c':
                 k = 0;
+                
                 while (k < length) {
                     if (fscanf(infile, "%c", &c) != 1) {
                         length = k;
                         break;
                     } else {
-
                         fprintf(outfile, "%c", c);
                         filesize += is_nucleotide(c);
                         position += is_nucleotide(c);
@@ -188,7 +188,7 @@ int add_mutations(char *argv[]) {
                         }
                     }
                 }
-
+                
                 for (int i = 0; i < length; i++) {
                     fprintf(outfile, "%c", copy_buffer[i]);
                     filesize++;

@@ -71,8 +71,7 @@ RUN mkdir carsonella &&\
 
 RUN apt-get update && apt-get install nano mlocate && updatedb
     
-COPY scripts scripts
-COPY carsonella_ruddii carsonella
+COPY . /root
 
 RUN gcc ./scripts/generate_mut.c -o ./scripts/generate_mut.exe && \
      gcc ./scripts/generate_pack.c -o ./scripts/generate_pack.exe &&\
