@@ -120,8 +120,8 @@ int add_insertions(int edge) {
         double p = randfrom(0.0, 1.0);
         if (p < INDEL_PROBABILITY) {
             int length = (rand() % MAX_SMALL_MUT_SIZE) + 1;
-            fprintf(config, "%s %d %d 1.00 INS ", chromosome, filesize + 1, filesize + 2);
-            fprintf(inner_config, "i %d %d ", filesize, length);
+            fprintf(config, "%s %d %d 1.00 INS ", chromosome, position + 1, position + 2);
+            fprintf(inner_config, "i %d %d ", position, length);
 
             for (int i = 0; i < length; i++) {
                 char b = random_nucleotide('A');
@@ -140,7 +140,6 @@ int add_insertions(int edge) {
 
 
 int add_deletions(int edge) {
-    int i = 0;
     int k = 0;
     while ((fscanf(infile, "%c", &a) == 1) && (position < edge)) {
         double p = randfrom(0.0, 1.0);
@@ -152,16 +151,16 @@ int add_deletions(int edge) {
                     length = k;
                     break;
                 } else {
-                    i += is_nucleotide(a);
+                    position += is_nucleotide(a);
                     k += is_nucleotide(a);
                 }
             }
-            fprintf(config, "%s %d %d 1.00 DEL \n", chromosome, i + 1, i + length + 1);
-            fprintf(inner_config, "d %d %d\n", i, length);
-            i += length;
+            fprintf(config, "%s %d %d 1.00 DEL \n", chromosome, position + 1, position + length + 1);
+            fprintf(inner_config, "d %d %d\n", position, length);
+            position += length;
         } else {
             filesize += is_nucleotide(a);
-            i += is_nucleotide(a);
+            position += is_nucleotide(a);
         }
     }
     return 0;
@@ -184,8 +183,8 @@ int add_copies(int edge) {
                 }
             }
 
-            fprintf(config, "%s %d %d DUP %d 1.0 ", chromosome, filesize + 1, filesize + length + 1, rand() % 3 + 1);
-            fprintf(inner_config, "c %d %d\n", filesize, length);
+            fprintf(config, "%s %d %d DUP %d 1.0 ", chromosome, position + 1, position + length + 1, rand() % 3 + 1);
+            fprintf(inner_config, "c %d %d\n", position, length);
             filesize += length;
             position += length;
             fprintf(config, "%c", '\n');
