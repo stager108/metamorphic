@@ -92,7 +92,7 @@ char random_point_mut(char inp, double prob) {
 
 int add_point_mutations(int edge) {
     while ((fscanf(infile, "%c", &a) == 1) && (position < edge)) {
-        int x = rand() % 3;
+        int x = rand() % 2;
         char b = random_point_mut(a, POINT_MUTATION_PROBABILITY);
         double p = randfrom(0.0, 1.0);
         if ((is_nucleotide(a)) & (p < POINT_MUTATION_PROBABILITY)) {
