@@ -89,5 +89,25 @@ RUN gcc ./scripts/generate_mut.c -o ./scripts/generate_mut.exe && \
 RUN cp velvet_1.2.10/velvetg /bin && cp velvet_1.2.10/velveth /bin
 
 RUN pip install sequenza-utils
+RUN apt-get update && apt-get install -y r-base
 
-#CMD chmod a+x scripts/* && ./scripts/test_surg_casc_mut.sh test1 test_ins1_ 3 i
+RUN R -e " \
+        r = getOption('repos'); \
+        r['CRAN'] = 'http://cran.us.r-project.org'; \
+        options(repos = r); \
+        install.packages('devtools'); \
+        library('devtools'); \
+        install_github('aroneklund/copynumber'); \
+        squash <- 'https://cran.r-project.org/src/contrib/Archive/squash/squash_1.0.8.tar.gz'; \
+        install.packages(squash, repos=NULL, type='source'); \
+        sequenza <- 'https://cran.r-project.org/src/contrib/Archive/sequenza/sequenza_2.1.2.tar.gz'; \
+        install.packages(sequenza, repos=NULL, type='source'); \
+        install.packages('dplyr'); \
+        opt <- 'https://cran.r-project.org/src/contrib/getopt_1.20.3.tar.gz'; \
+        install.packages(opt, repos=NULL, type='source'); \
+        install.packages('testthat'); \
+        install.packages('VennDiagram'); \
+        install.packages('data.table'); \
+        install.packages('R.utils'); \
+        bedr <- 'https://cran.r-project.org/src/contrib/bedr_1.0.7.tar.gz'; \
+        install.packages(bedr, repos=NULL, type='source'); "  
