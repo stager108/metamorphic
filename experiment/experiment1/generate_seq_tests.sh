@@ -19,11 +19,11 @@ do
   ./scripts/run_iss_bwa.sh ${TESTDIR} ${TESTDIR}/genome_mut_${MODE}${i}.fa mutated_${MODE}${i} 50 ${GENOME}
 
   sequenza-utils gc_wiggle -f ${TESTDIR}/genome_mut_${MODE}${i}.fa -o ${TESTDIR}/genome_mut_${MODE}${i}.wig -w 50
-  sequenza-utils bam2seqz -n ${TESTDIR}/aligned.bam -t ${TESTDIR}/mutated_${MODE}${i}.bam -gc ${TESTDIR}/genome_mut_${MODE}${i}.wig -F ${GENOME} -o ${TESTDIR}/genome_mut_${MODE}${i}_seq.txt
-  sequenza-utils seqz_binning --seqz ${TESTDIR}/genome_mut_${MODE}${i}_seq.txt -w 50 -o ${TESTDIR}/genome_mut_${MODE}${i}_seq.seqz
+  sequenza-utils bam2seqz -n ${TESTDIR}/aligned.bam -t ${TESTDIR}/mutated_${MODE}${i}.bam -gc ${TESTDIR}/genome_mut_${MODE}${i}.wig -F ${GENOME} -o ${TESTDIR}/genome_mut_${MODE}${i}_seq.txt.gz
+  sequenza-utils seqz_binning --seqz ${TESTDIR}/genome_mut_${MODE}${i}_seq.txt.gz -w 50 -o ${TESTDIR}/genome_mut_${MODE}${i}_seq.seqz.gz
 
   ./scripts/run_strelka.sh ${TESTDIR} aligned mutated_${MODE}${i} ${TESTPREFIX}0${i} ${GENOME}
 
 done
 
-cp -r ${TESTDIR} results/
+mv -r ${TESTDIR} results/
