@@ -182,7 +182,7 @@ int add_copies(int edge) {
                 }
             }
 
-            fprintf(inner_config, "%s %d %d DUP %d 1.0\n", chromosome, position + 1, position + length + 1, rand() % 3 + 1);
+            fprintf(inner_config, "%s %d %d DUP 0.9\n", chromosome, position + 1, position + length + 1);
             filesize += length;
             position += length;
         }
