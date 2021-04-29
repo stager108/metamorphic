@@ -6,12 +6,12 @@
 #include <regex.h>
 
 const int MAX_SMALL_MUT_SIZE = 50;
-const int MIN_COPY_SIZE = 5000;
-const int COPY_INTERVAL = 5000;
+const int MIN_COPY_SIZE = 500;
+const int COPY_INTERVAL = 1000;
 const int INTERVAL = 10000;
 
 const double INDEL_PROBABILITY = 0.0001;
-const double COPYNUMBER_PROBABILITY = 0.001;
+const double COPYNUMBER_PROBABILITY = 0.0001;
 const double POINT_MUTATION_PROBABILITY = 0.005;
 
 
@@ -128,7 +128,6 @@ int add_insertions(int edge) {
             for (int i = 0; i < length; i++) {
                 char b = random_nucleotide('A');
                 fprintf(config, "%c", b);
-                fprintf(inner_config, "%c", b);
                 filesize++;
             }
             fprintf(config, "%c", '\n');
@@ -183,7 +182,7 @@ int add_copies(int edge) {
                 }
             }
 
-            fprintf(inner_config, "%s %d %d BIGDUP %d 1.0\n", chromosome, position + 1, position + length + 1, rand() % 3 + 1);
+            fprintf(inner_config, "%s %d %d DUP %d 1.0\n", chromosome, position + 1, position + length + 1, rand() % 3 + 1);
             filesize += length;
             position += length;
         }

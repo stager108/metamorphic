@@ -8,17 +8,17 @@ TESTPREFIX=$5
 GENOME=$6
 
 # bamSurgeon
-addindel.py -v ${TESTCONFIG} -f ./${TESTDIR}/${BAMFILE}.bam -r ${GENOME} \
--o ./${TESTDIR}/${TESTPREFIX}testregion_mut.bam  --picardjar ./picard/build/libs/picard.jar --aligner mem --seed 1234
+addindel.py -v ${TESTCONFIG} -f ${TESTDIR}/${BAMFILE}.bam -r ${GENOME} \
+-o ${TESTDIR}/${TESTPREFIX}testregion_mut.bam  --picardjar picard/build/libs/picard.jar --aligner mem --seed 1234
 
 # sort
-samtools sort -o ./${TESTDIR}/${OUTPUTFILE}.bam ./${TESTPREFIX}/${TESTDIR}testregion_mut.bam
+samtools sort -o ${TESTDIR}/${OUTPUTFILE}.bam ${TESTPREFIX}/${TESTDIR}testregion_mut.bam
 
-mv ./${TESTPREFIX}testregion_mut.addindel.test_indel.vcf  ./${TESTDIR}/${TESTPREFIX}mut.vcf 
+mv ${TESTPREFIX}testregion_mut.addindel.test_indel.vcf  ${TESTDIR}/${TESTPREFIX}mut.vcf 
 
 # indexing
-java -jar ./picard/build/libs/picard.jar BuildBamIndex \
-      -I ./${TESTDIR}/${OUTPUTFILE}.bam -O ./${TESTDIR}/${OUTPUTFILE}.bam.bai
+java -jar /root/picard/build/libs/picard.jar BuildBamIndex \
+      -I ${TESTDIR}/${OUTPUTFILE}.bam -O ${TESTDIR}/${OUTPUTFILE}.bam.bai
 
 # delete garbage
 rm -r addindel*

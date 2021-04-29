@@ -76,11 +76,18 @@ RUN pip install biopython==1.77
 
 RUN mkdir carsonella &&\
     mkdir scripts &&\
-    mkdir results &&\ mkdir experiment1 && experiment2 && experiment3
+    mkdir results &&\
+    mkdir experiment1 && mkdir experiment2 && mkdir experiment3
 
 RUN apt-get update && apt-get install nano mlocate && updatedb
 
 RUN cp velvet_1.2.10/velvetg /bin && cp velvet_1.2.10/velveth /bin
+
+RUN pip install sequenza-utils
+RUN apt-get update && apt-get install -y r-base
+
+COPY install_sequenza.r /root
+RUN Rscript install_sequenza.r
     
 COPY . /root
 
@@ -92,7 +99,3 @@ RUN gcc ./experiment2/generate_mut.c -o ./experiment2/generate_mut.exe && \
      gcc ./experiment2/generate_pack.c -o ./experiment2/generate_pack.exe
      
 
-RUN pip install sequenza-utils
-RUN apt-get update && apt-get install -y r-base
-
-RUN Rscript ./experiment2/install_sequenza.r
