@@ -94,7 +94,9 @@ COPY . /root
 RUN gcc ./experiment1/generate_mut.c -o ./experiment1/generate_mut.exe && \
      gcc ./experiment1/generate_pack.c -o ./experiment1/generate_pack.exe &&\
      gcc ./experiment1/apply_mut.c -o ./experiment1/apply_mut.exe
-
+RUN gcc ./experiment1.2/generate_mut.c -o ./experiment1.2/generate_mut.exe && \
+     gcc ./experiment1.2/generate_pack.c -o ./experiment1.2/generate_pack.exe &&\
+     gcc ./experiment1.2/apply_mut.c -o ./experiment1.2/apply_mut.exe
 RUN gcc ./experiment2/generate_mut.c -o ./experiment2/generate_mut.exe && \
      gcc ./experiment2/generate_pack.c -o ./experiment2/generate_pack.exe
      
