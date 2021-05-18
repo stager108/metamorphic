@@ -4,27 +4,26 @@ import random
 import argparse
 
 def generate_cascade_test(file, prefix, n):
-    som_list = [list() for i in range(n)]
-    germ_list = [list() for i in range(n)]
+    tum_list = [list() for i in range(n)]
+    norm_list = [list() for i in range(n)]
     with open(file, 'r') as f:
         for line in f.readlines():
             x = random.random()
             p = random.random()
             for treshold in range(1, n+1):
-                if x <= treshold/n and x > (treshold-1)/n:
+                if x <= treshold/n and x > (treshold - 1)/n:
+                    for j in range(treshold - 1, n):
+                        tum_list[j].append(line)
                     if p <= 1/2:
-                        for j in range(treshold, n):
-                            som_list[j].append(line)
-                    else:
-                        for j in range(treshold, n):
-                            germ_list[j].append(line)
+                        for j in range(treshold - 1, n):
+                            norm_list[j].append(line)
                     break
     for i in range(n):
-        with open(prefix + '0' + str(i) + '_som.txt', 'w') as f:
-            for elem in som_list[i]:
+        with open(prefix + '0' + str(i) + '_tum.txt', 'w') as f:
+            for elem in tum_list[i]:
                 f.write(elem)
-        with open(prefix + '0' + str(i) + '_germ.txt', 'w') as f:
-            for elem in germ_list[i]:
+        with open(prefix + '0' + str(i) + '_norm.txt', 'w') as f:
+            for elem in norm_list[i]:
                 f.write(elem)                
 
 

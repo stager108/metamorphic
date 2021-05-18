@@ -15,8 +15,8 @@ sequenza-utils gc_wiggle -f ${GENOME} -o ${TESTDIR}/genome.wig -w 50
 for i in `seq 0 $((N-1))`
 do
   TESTDIR=$1
-  ./experiment1.2/apply_mut.exe ${GENOME} ${TESTDIR}/genome_mut_${MODE}${i}_n.fa $TESTDIR/${TESTPREFIX}0${i}_germ.txt -a
-  ./experiment1.2/apply_mut.exe ${GENOME} ${TESTDIR}/genome_mut_${MODE}${i}_t.fa $TESTDIR/${TESTPREFIX}0${i}_som.txt -a
+  ./experiment1.2/apply_mut.exe ${GENOME} ${TESTDIR}/genome_mut_${MODE}${i}_n.fa $TESTDIR/${TESTPREFIX}0${i}_norm.txt -a
+  ./experiment1.2/apply_mut.exe ${GENOME} ${TESTDIR}/genome_mut_${MODE}${i}_t.fa $TESTDIR/${TESTPREFIX}0${i}_tum.txt -a
 
   ./experiment1.2/run_iss_bwa.sh ${TESTDIR} ${TESTDIR}/genome_mut_${MODE}${i}_t.fa mutated_${MODE}${i}_t 50 ${GENOME}
   ./experiment1.2/run_iss_bwa.sh ${TESTDIR} ${TESTDIR}/genome_mut_${MODE}${i}_n.fa mutated_${MODE}${i}_n 50 ${GENOME}
@@ -25,7 +25,8 @@ do
   sequenza-utils bam2seqz -n ${TESTDIR}/mutated_${MODE}${i}_n.bam -t ${TESTDIR}/mutated_${MODE}${i}_t.bam -gc ${TESTDIR}/genome.wig -F ${GENOME} -o ${TESTDIR}/genome_mut_${MODE}${i}_seq.txt
   sequenza-utils seqz_binning --seqz ${TESTDIR}/genome_mut_${MODE}${i}_seq.txt -w 50 -o ${TESTDIR}/genome_mut_${MODE}${i}_seq.seqz
 
-  ./experiment1.2/run_strelka_germ.sh ${TESTDIR} mutated_${MODE}${i}_n mutated_${MODE}${i}_t ${TESTPREFIX}0${i} ${GENOME}
+  ./experiment1.2/run_strelka_germ.sh ${TESTDIR} mutated_${MODE}${i}_n ${TESTPREFIX}_n_0${i} ${GENOME}
+  ./experiment1.2/run_strelka_germ.sh ${TESTDIR} mutated_${MODE}${i}_t ${TESTPREFIX}_t_0${i} ${GENOME}
   ./experiment1.2/run_strelka_som.sh ${TESTDIR} mutated_${MODE}${i}_n mutated_${MODE}${i}_t ${TESTPREFIX}0${i} ${GENOME}
 
 done
