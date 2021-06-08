@@ -27,7 +27,7 @@ do
   sequenza-utils bam2seqz -n ${TESTDIR}/aligned.bam -t ${TESTDIR}/${TESTPREFIX}0${i}.bam -gc ${TESTDIR}/genome_mut.wig -F ${GENOME} -o ${TESTDIR}/genome_mut_${MODE}${i}_seq.txt
   sequenza-utils seqz_binning --seqz ${TESTDIR}/genome_mut_${MODE}${i}_seq.txt -w 50 -o ${TESTDIR}/genome_mut_${MODE}${i}_seq.seqz
 
-  ./experiment2/run_strelka.sh ${TESTDIR} aligned ${TESTPREFIX}0${i} ${TESTPREFIX} ${GENOME}
+  ./experiment2/run_strelka.sh ${TESTDIR} aligned ${TESTPREFIX}0${i} ${TESTPREFIX}_${i} ${GENOME}
 
 done
 

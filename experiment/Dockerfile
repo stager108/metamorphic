@@ -101,3 +101,4 @@ RUN gcc ./experiment2/generate_mut.c -o ./experiment2/generate_mut.exe && \
      gcc ./experiment2/generate_pack.c -o ./experiment2/generate_pack.exe
      
 
+RUN gcc ./experiment4/generate_mut.c -o ./experiment4/generate_mut.exe
