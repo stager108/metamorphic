@@ -1,0 +1,20 @@
+# reconsider use of config file in distribution
+# should be placed in user or project dir
+logger:
+  level: "INFO"
+
+extras:
+  base: mldev.experiment_objects
+  bot: mldev_bot.bot_service
+  tensorboard: mldev_tensorboard.tensorboard_service
+  dvc: mldev_dvc.dvc_stage
+  controller: mldev_controller.controller_service
+
+environ:
+  PYTHON_INTERPRETER: python3
+  EXPERIMENT_FILE: "./experiment.yml"
+  NGROK_TOKEN: "my ngrok token"
+  TELEGRAM_TOKEN: "my telegram token"
+  ASK_MISSING: 0
+#  DVC_REMOTE_GDRIVE: ""
+  DVC_REMOTE_NAME: "myremote"
